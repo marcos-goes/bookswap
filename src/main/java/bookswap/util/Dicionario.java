@@ -17,12 +17,12 @@ public class Dicionario {
 	
 	@PostConstruct
 	private void init(){
-		System.out.println("Iniciando o dicionário...");
+		System.out.println("Iniciando o dicionï¿½rio...");
 		
 		Livro livro1 = new Livro(1, "Livro do Marcos", "Marcos");
 		Livro livro2 = new Livro(2, "Embaixador", "Luis");
 		Livro livro3 = new Livro(3, "War Room", "Maria");
-		Livro livro4 = new Livro(4, "História do Dell", "Jurema");
+		Livro livro4 = new Livro(4, "Historia do Dell", "Jurema");
 		Livro livro5 = new Livro(5, "Efective Recognized", "Ana");
 		
 		this.livros = new HashMap<Integer, Livro>();
@@ -34,10 +34,9 @@ public class Dicionario {
 	}
 	
 	
-	public void adicionaLivro(Livro livro){
-		livros.put(livro.getId(), livro);
+	public Livro adicionaLivro(Livro livro){
+		return livros.putIfAbsent(livro.getId(), livro);
 	}
-	
 	
 	public Livro buscaLivro(Integer id){
 		return livros.get(id);
@@ -46,5 +45,9 @@ public class Dicionario {
 	public List<Livro> buscaTodos(){
 		List<Livro> lista = new ArrayList<Livro>(livros.values());
 		return lista;
+	}
+	
+	public Livro excluiLivro(Integer id){
+		return livros.remove(id);
 	}
 }

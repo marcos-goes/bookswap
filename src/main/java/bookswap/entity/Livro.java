@@ -3,15 +3,20 @@ package bookswap.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 //@Entity
-@XmlAccessorType
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Livro {
 
 	private Integer id;
 	private String titulo;
+	
+	@XmlElement(name="autor")
 	private List<String> autores;
 	
 	
@@ -28,7 +33,6 @@ public class Livro {
 		this.titulo = titulo;
 	}
 	
-	@XmlElement(name="autor")
 	public List<String> getAutores() {
 		return autores;
 	}
