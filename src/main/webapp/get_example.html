@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="notesApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>$http GET example</title>
+		<style>
+			.item {
+				padding: 10px;
+			}
+		</style>
+	</head>
+	<body ng-controller="MainCtrl as mainCtrl">
+		<h2>Hello Servers!</h2>
+		<div ng-repeat="todo in mainCtrl.items" class="item">
+			<div><span ng-bind="todo.id"></span></div>
+			<div><span ng-bind="todo.titulo"></span></div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+		<script>
+			angular.module('notesApp',[])
+				.controller('MainCtrl',['$http', function($http){
+					var self = this;
+					self.items = [];
+					$http.get('api/book').then(function(response){
+						self.items = response.data;
+					}, function(errResponse){
+						console.error('Error while fetching books...');
+					});
+				}]);
+		</script>
+	</body>
+</html>

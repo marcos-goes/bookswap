@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html ng-app="notesApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>$http POST example</title>
+		<style>
+			.item {
+				padding: 10px;
+			}
+		</style>
+	</head>
+	<body ng-controller="MainCtrl as mainCtrl">
+		<h2>Hello Servers!</h2>
+		<div ng-repeat="todo in mainCtrl.items" class="item">
+			<div><span ng-bind="todo.id"></span></div>
+			<div><span ng-bind="todo.titulo"></span></div>
+		</div>
+		
+		<div>
+			<form name="addForm" ng-submit="mainCtrl.adiciona()">
+				<input type="number" placeholder="Id" ng-model="mainCtrl.newBook.id" required/>
+				<input type="text" placeholder="Titulo" ng-model="mainCtrl.newBook.titulo" required/>
+				<input type="text" placeholder="Autor" ng-model="mainCtrl.newBook.nome" required/>
+				<input type="submit" value="Adicionar" ng-disabled="addForm.$invalid">
+			</form>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+		<script>
+			angular.module('notesApp',[])
+				.controller('MainCtrl',['$http', function($http){
+					var self = this;
+					self.items = [];
+					self.newBook = {};
+					
+					var populaLivros = function(){
+						return $http.get('api/book').then(
+							function(response){
+								self.items = response.data;
+							}, 
+							function(errResponse){
+								console.error('Erro ao consultar livros...');
+							});
+					};
+					
+					populaLivros();
+					
+					self.adiciona = function() {
+						self.newBook.autor = [];
+						self.newBook.autor.push(self.newBook.nome);
+						self.newBook.nome = undefined;
+						$http.post('api/book', self.newBook)
+							.then(populaLivros)
+							.then(function(response){
+								self.newBook = {};
+							});
+					};
+				}]);
+		</script>
+	</body>
+</html>
