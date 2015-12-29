@@ -55,6 +55,42 @@
 								self.newBook = {};
 							});
 					};
+				}])
+				.factory('LogInterceptor',['$q', function($q){
+					return {
+						request: function(config){
+							console.log('Request made with: ', config);
+							return config;
+							// Se houver um erro, não houver permissão ou ocorrer uma condição personalizada
+							// return $q.reject('Not Allowed.');
+						},
+						requestError: function(rejection){
+							console.log('Request error due to: ', rejection);
+							// Continua para garantir que a próxima cadeia de promise veja um erro
+							return $q.reject(rejection);
+							// Ou trata o erro e retorna algum valor para dar sucesso
+							// return someValue;
+						},
+						response: function(response){
+							console.log('Response from server: ', response);
+							// Retorna uma promise
+							return response || $q.when(response);
+						},
+						responseError: function(rejection){
+							console.log('Response error: ', rejection);
+							// Continua para garantir que a próxima cadeia de promise veja um erro
+							// Poderíamos verificar, por exemplo, o código de status de authorization
+							// if(rejection.status === 403){
+							//    mostra um dialogo de login
+							//    retorna um valor para dizer aos controladores que foi tratado
+							//}
+							// Ou retorna mesmo uma rejeição para continuar a cadeia de falhas da promise
+							return $q.reject(rejection);
+						}
+					};
+				}])
+				.config(['$httpProvider', function($httpProvider){
+					$httpProvider.interceptors.push('LogInterceptor');
 				}]);
 		</script>
 	</body>
